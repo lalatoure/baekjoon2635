@@ -1,0 +1,42 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include<stdlib.h>
+void find(int N, int array[], int* max_length);
+int main(void) {
+	int N;
+	scanf("%d", &N);
+	int max_length;
+	int* array;
+	array = (int*)malloc(sizeof(int) * 30000);
+	if (array == NULL) {
+		printf("Memory allocation failed\n");
+		return 1;
+	}
+	find(N, array,&max_length);
+	printf("%d", max_length);
+	printf("\n");
+	for (int i = 0; i < max_length; i++) {
+		printf("%d ", array[i]);
+	}
+	free(array);
+	return 0;
+}
+void find(int N, int array[], int* max_length) {
+	int master[30000];
+	*max_length = 0;
+	for (int i = 1; i < N; i++) {
+		int length = 2;
+		master[0] = N;
+		master[1] = i;
+		for (int j = 2; j < N; j++) {
+			master[j] = master[j - 2] - master[j - 1];
+			if (master[j] < 0)
+				break;
+			length++;
+		}
+		if(length>*max_length)
+			for (int k = 0; k < length; k++) {
+				array[k] = master[k];
+			}
+	}
+}
